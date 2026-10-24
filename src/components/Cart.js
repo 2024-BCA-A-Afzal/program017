@@ -1,3 +1,4 @@
+
 import React from "react";
 
 function Cart({ cart, dispatch }) {
@@ -12,74 +13,68 @@ function Cart({ cart, dispatch }) {
   );
 
   return (
-    <section className="cart">
+    <section className="section">
       <h2>Shopping Cart</h2>
 
-      <p data-testid="total-items">
-        Total Items: {totalItems}
-      </p>
-
-      <p data-testid="total-price">
-        Total Price: ₹{totalPrice.toLocaleString("en-IN")}
-      </p>
-
       {cart.length === 0 ? (
-        <p>Your cart is empty.</p>
+        <p className="empty">Your cart is empty. Add some products!</p>
       ) : (
-        <div>
+        <div className="cart-list">
           {cart.map((item) => (
             <div className="cart-item" key={item.id}>
-              <h3>{item.name}</h3>
+              <div className="cart-info">
+                <h3>{item.name}</h3>
+                <p>
+                  ₹{item.price.toLocaleString("en-IN")} × {item.quantity}
+                </p>
+                <strong>
+                  Subtotal: ₹{(item.price * item.quantity).toLocaleString("en-IN")}
+                </strong>
+              </div>
 
-              <p>
-                Price: ₹{item.price.toLocaleString("en-IN")}
-              </p>
+              <div className="cart-actions">
+                <button
+                  className="quantity-btn"
+                  onClick={() =>
+                    dispatch({ type: "DECREASE", id: item.id })
+                  }
+                  aria-label={`Decrease ${item.name} quantity`}
+                >
+                  -
+                </button>
 
-              <p>Quantity: {item.quantity}</p>
+                <span className="quantity">{item.quantity}</span>
 
-              <p>
-                Subtotal: ₹
-                {(item.price * item.quantity).toLocaleString("en-IN")}
-              </p>
+                <button
+                  className="quantity-btn"
+                  onClick={() =>
+                    dispatch({ type: "INCREASE", id: item.id })
+                  }
+                  aria-label={`Increase ${item.name} quantity`}
+                >
+                  +
+                </button>
 
-              <button
-                aria-label={`Decrease ${item.name}`}
-                onClick={() =>
-                  dispatch({
-                    type: "DECREASE",
-                    payload: item.id
-                  })
-                }
-              >
-                -
-              </button>
-
-              <button
-                aria-label={`Increase ${item.name}`}
-                onClick={() =>
-                  dispatch({
-                    type: "INCREASE",
-                    payload: item.id
-                  })
-                }
-              >
-                +
-              </button>
-
-              <button
-                onClick={() =>
-                  dispatch({
-                    type: "REMOVE",
-                    payload: item.id
-                  })
-                }
-              >
-                Remove
-              </button>
+                <button
+                  className="remove-btn"
+                  onClick={() =>
+                    dispatch({ type: "REMOVE", id: item.id })
+                  }
+                >
+                  Remove
+                </button>
+              </div>
             </div>
           ))}
         </div>
       )}
+
+      <div className="cart-summary">
+        <h3>Total Items: {totalItems}</h3>
+        <h2>
+          Total Price: ₹{totalPrice.toLocaleString("en-IN")}
+        </h2>
+      </div>
     </section>
   );
 }
